@@ -36,21 +36,14 @@ Math_Vector<T>::Math_Vector(Math_Vector<T>&& other)
 {
     m_dataPtr = other.m_dataPtr;
     m_size = other.m_size;
-	other.m_dataPtr = NULL;
-	other.m_size = 0;
+    other.m_dataPtr = NULL;
 }
 
 
 template <typename T>
 Math_Vector<T>::~Math_Vector()
 {
-	/*for (int i = 0; i < m_size; i++)
-	{
-		std::cout << std::endl << "location: " << i << " : " << m_dataPtr[i] << std::endl;
-	}*/
-	if(m_dataPtr != NULL)
-		delete[] m_dataPtr;
-	m_size = 0;
+    delete[] m_dataPtr;
 }
 
 
@@ -213,7 +206,7 @@ Math_Vector<T> Math_Vector<T>::operator * (const T& scalar) const
     {
         scaledArr[i] = m_dataPtr[i] * scalar;
     }
-    return scaledArr;
+    return std::move(scaledArr);
 }
 
 

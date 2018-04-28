@@ -12,7 +12,6 @@
 #include <fstream>
 #include <vector>
 #include "Math_Vector.h"
-#include "absMatrix.h"
 using namespace std;
 
 
