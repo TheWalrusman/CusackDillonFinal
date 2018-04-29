@@ -1,0 +1,4 @@
+main.o: main.cpp absMatrix.h Math_Vector.h Math_Vector.hpp absMatrix.hpp \
+ denseMatrix.h denseMatrix.hpp steepestDescent.h symmetricMatrix.h \
+ symmetricMatrix.hpp steepestDescent.hpp GaussSeidel.h GaussianInverse.h \
+ GaussianInverse.hpp GaussSeidel.hpp
