@@ -1,0 +1,2 @@
+main.o: main.cpp Math_Vector.h Math_Vector.hpp denseMatrix.h absMatrix.h \
+ absMatrix.hpp denseMatrix.hpp
