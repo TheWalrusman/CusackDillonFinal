@@ -1,17 +1,17 @@
-#pragma once
+
 #ifndef CENTERDIFFMESH_HPP
 #define CENTERDIFFMESH_HPP
 
 
 template< class T, class U, class V, T xLower(const U, const V), T xUpper(const U, const V), T yLower(const U, const V), T yUpper(const U, const V)>
-void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::setSubdivisions(const unsigned numSubs)
+void CenterDiffMesh< T, U, V, xLower, xUpper, yLower, yUpper >::setSubdivisions(const unsigned numSubs)
 {
 	m_stepsize = numSubs;
 }
 
 
 template< class T, class U, class V, T xLower(const U, const V), T xUpper(const U, const V), T yLower(const U, const V), T yUpper(const U, const V)>
-void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMatrix<T>& A, Math_Vector<T>& B)
+void CenterDiffMesh< T, U, V, xLower, xUpper, yLower, yUpper >::operator()(denseMatrix<T>& A, Math_Vector<T>& B)
 {
 
 	//unsigned m_stepsize = atoi(argv[1]);

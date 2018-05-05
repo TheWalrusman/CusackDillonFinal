@@ -66,7 +66,6 @@
   <ItemGroup>
     <ClCompile Include="BoundFuncts.hpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Olddirilecttxt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="absMatrix.h" />
@@ -83,7 +82,7 @@
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWarningAsError>true</TreatWarningAsError>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
