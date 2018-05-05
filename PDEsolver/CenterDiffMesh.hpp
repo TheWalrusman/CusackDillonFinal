@@ -73,24 +73,24 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 		bSum = 0;
 		//nbSum = 0;
 		//see third and forth term
-		if (x == 0)
-		{
-			//nbSum += xLower(newx*h, nym*h);
-			//nbSum += xLower(newx*h, nyp*h);
-			bSum += xLower(x*h, ym*h);
-			bSum += xLower(x*h, yp*h);
-			thirdOnBound = true;
-			fourthOnBound = true;
-		}
-		if (x == m_stepsize)
-		{
-			//nbSum += xUpper(newx*h, nym*h);
-			//nbSum += xUpper(newx*h, nyp*h);
-			bSum += xUpper(x*h, ym*h);
-			bSum += xUpper(x*h, yp*h);
-			thirdOnBound = true;
-			fourthOnBound = true;
-		}
+		//if (x == 0)
+		//{
+		//	//nbSum += xLower(newx*h, nym*h);
+		//	//nbSum += xLower(newx*h, nyp*h);
+		//	bSum += xLower(x*h, ym*h);
+		//	bSum += xLower(x*h, yp*h);
+		//	thirdOnBound = true;
+		//	fourthOnBound = true;
+		//}
+		//if (x == m_stepsize)
+		//{
+		//	//nbSum += xUpper(newx*h, nym*h);
+		//	//nbSum += xUpper(newx*h, nyp*h);
+		//	bSum += xUpper(x*h, ym*h);
+		//	bSum += xUpper(x*h, yp*h);
+		//	thirdOnBound = true;
+		//	fourthOnBound = true;
+		//}
 		//see first term
 		if (xm == 0)
 		{
@@ -118,24 +118,24 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 			secOnBound = true;
 		}
 		//see first and second term
-		if (y == 0)
-		{
-			//nbSum += yLower(nxm*h, newy*h);
-			//nbSum += yLower(nxp*h, newy*h);
-			bSum += yLower(xm*h, y*h);
-			bSum += yLower(xp*h, y*h);
-			firstOnBound = true;
-			secOnBound = true;
-		}
-		if (y == m_stepsize)
-		{
-			//nbSum += yUpper(nxm*h, newy*h);
-			//nbSum += yUpper(nxp*h, newy*h);
-			bSum += yUpper(xm*h, y*h);
-			bSum += yUpper(xp*h, y*h);
-			firstOnBound = true;
-			secOnBound = true;
-		}
+		//if (y == 0)
+		//{
+		//	//nbSum += yLower(nxm*h, newy*h);
+		//	//nbSum += yLower(nxp*h, newy*h);
+		//	bSum += yLower(xm*h, y*h);
+		//	bSum += yLower(xp*h, y*h);
+		//	firstOnBound = true;
+		//	secOnBound = true;
+		//}
+		//if (y == m_stepsize)
+		//{
+		//	//nbSum += yUpper(nxm*h, newy*h);
+		//	//nbSum += yUpper(nxp*h, newy*h);
+		//	bSum += yUpper(xm*h, y*h);
+		//	bSum += yUpper(xp*h, y*h);
+		//	firstOnBound = true;
+		//	secOnBound = true;
+		//}
 		//see third term
 		if (ym == 0)
 		{
