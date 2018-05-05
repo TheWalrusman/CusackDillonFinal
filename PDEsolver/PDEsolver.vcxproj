@@ -64,11 +64,14 @@
     <RemoteCppCompileToolExe>g++-7</RemoteCppCompileToolExe>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="BoundFuncts.hpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="absMatrix.h" />
     <ClInclude Include="absMatrix.hpp" />
+    <ClInclude Include="CenterDiffMesh.h" />
+    <ClInclude Include="CenterDiffMesh.hpp" />
     <ClInclude Include="denseMatrix.h" />
     <ClInclude Include="denseMatrix.hpp" />
     <ClInclude Include="Math_Vector.h" />
