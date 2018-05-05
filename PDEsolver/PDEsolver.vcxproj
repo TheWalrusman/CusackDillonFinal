@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClCompile Include="BoundFuncts.hpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Olddirilecttxt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="absMatrix.h" />

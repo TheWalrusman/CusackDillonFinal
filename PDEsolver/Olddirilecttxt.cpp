@@ -17,20 +17,20 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 	//unsigned m_stepsize = atoi(argv[1]);
 	double h = 1.0 / (m_stepsize);
 	//double stepsize = 1.0 / (m_stepsize);
-	//double newx = 1;
-	double x = 1;
-	//double newy = 1;
-	double y = 1;
+	double newx = 1;
+	double x = h;
+	double newy = 1;
+	double y = h;
 	double xp;
-	//double nxp;
+	double nxp;
 	double xm;
-	//double nxm;
+	double nxm;
 	double yp;
-	//double nyp;
+	double nyp;
 	double ym;
-	//double nym;
+	double nym;
 	double bSum;
-	//double nbSum;
+	double nbSum;
 	bool firstOnBound;
 	bool secOnBound;
 	bool thirdOnBound;
@@ -50,14 +50,14 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 	{
 
 		//===== GENERATE THE PARAM VALUES USED IN EQUATION ======
-		xp = x + 1;
-		//nxp = newx + 1;
-		xm = x - 1;
-		//nxm = newx - 1;
-		yp = y + 1;
-		//nyp = newy + 1;
-		ym = y - 1;
-		//nym = newy - 1;
+		xp = x + h;
+		nxp = newx + 1;
+		xm = x - h;
+		nxm = newx - 1;
+		yp = y + h;
+		nyp = newy + 1;
+		ym = y - h;
+		nym = newy - 1;
 		//====================================================== 
 
 
@@ -71,140 +71,140 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 
 		//================= GENERATE THE NUMBER THAT NEEDS TO GO INTO THE B VECTOR =========
 		bSum = 0;
-		//nbSum = 0;
+		nbSum = 0;
 		//see third and forth term
-		if (x == 0)
+		if (newx == 0)
 		{
-			//nbSum += xLower(newx*h, nym*h);
-			//nbSum += xLower(newx*h, nyp*h);
-			bSum += xLower(x*h, ym*h);
-			bSum += xLower(x*h, yp*h);
+			nbSum += xLower(newx*h, nym*h);
+			nbSum += xLower(newx*h, nyp*h);
+			bSum += xLower(x, ym);
+			bSum += xLower(x, yp);
 			thirdOnBound = true;
 			fourthOnBound = true;
 		}
-		if (x == m_stepsize)
+		if (newx == m_stepsize)
 		{
-			//nbSum += xUpper(newx*h, nym*h);
-			//nbSum += xUpper(newx*h, nyp*h);
-			bSum += xUpper(x*h, ym*h);
-			bSum += xUpper(x*h, yp*h);
+			nbSum += xUpper(newx*h, nym*h);
+			nbSum += xUpper(newx*h, nyp*h);
+			bSum += xUpper(x, ym);
+			bSum += xUpper(x, yp);
 			thirdOnBound = true;
 			fourthOnBound = true;
 		}
 		//see first term
-		if (xm == 0)
+		if (nxm == 0)
 		{
-			//nbSum += xLower(nxm*h, newy*h);
-			bSum += xLower(xm*h, y*h);
+			nbSum += xLower(nxm*h, newy*h);
+			bSum += xLower(xm, y);
 			firstOnBound = true;
 		}
-		if (xm == m_stepsize)
+		if (nxm == m_stepsize)
 		{
-			//nbSum += xUpper(nxm*h, newy*h);
-			bSum += xUpper(xm*h, y*h);
+			nbSum += xUpper(nxm*h, newy*h);
+			bSum += xUpper(xm, y);
 			firstOnBound = true;
 		}
 		//see second term
-		if (xp == 0)
+		if (nxp == 0)
 		{
-			//nbSum += xLower(nxp*h, newy*h);
-			bSum += xLower(xp*h, y*h);
+			nbSum += xLower(nxp*h, newy*h);
+			bSum += xLower(xp, y);
 			secOnBound = true;
 		}
-		if (xp == m_stepsize)
+		if (nxp == m_stepsize)
 		{
-			//nbSum += xUpper(nxp*h, newy*h);
-			bSum += xUpper(xp*h, y*h);
+			nbSum += xUpper(nxp*h, newy*h);
+			bSum += xUpper(xp, y);
 			secOnBound = true;
 		}
 		//see first and second term
-		if (y == 0)
+		if (newy == 0)
 		{
-			//nbSum += yLower(nxm*h, newy*h);
-			//nbSum += yLower(nxp*h, newy*h);
-			bSum += yLower(xm*h, y*h);
-			bSum += yLower(xp*h, y*h);
+			nbSum += yLower(nxm*h, newy*h);
+			nbSum += yLower(nxp*h, newy*h);
+			bSum += yLower(xm, y);
+			bSum += yLower(xp, y);
 			firstOnBound = true;
 			secOnBound = true;
 		}
-		if (y == m_stepsize)
+		if (newy == m_stepsize)
 		{
-			//nbSum += yUpper(nxm*h, newy*h);
-			//nbSum += yUpper(nxp*h, newy*h);
-			bSum += yUpper(xm*h, y*h);
-			bSum += yUpper(xp*h, y*h);
+			nbSum += yUpper(nxm*h, newy*h);
+			nbSum += yUpper(nxp*h, newy*h);
+			bSum += yUpper(xm, y);
+			bSum += yUpper(xp, y);
 			firstOnBound = true;
 			secOnBound = true;
 		}
 		//see third term
-		if (ym == 0)
+		if (nym == 0)
 		{
-			//nbSum += yLower(newx*h, nym*h);
-			bSum += yLower(x*h, ym*h);
+			nbSum += yLower(newx*h, nym*h);
+			bSum += yLower(x, ym);
 			thirdOnBound = true;
 		}
-		if (ym == m_stepsize)
+		if (nym == m_stepsize)
 		{
-			//nbSum += yUpper(newx*h, nym*h);
-			bSum += yUpper(x*h, ym*h);
+			nbSum += yUpper(newx*h, nym*h);
+			bSum += yUpper(x, ym);
 			thirdOnBound = true;
 		}
 		//see fourth term
-		if (yp == 0)
+		if (nyp == 0)
 		{
-			//nbSum += yLower(newx*h, nyp*h);
-			bSum += yLower(x*h, yp*h);
+			nbSum += yLower(newx*h, nyp*h);
+			bSum += yLower(x, yp);
 			fourthOnBound = true;
 		}
-		if (yp == m_stepsize)
+		if (nyp == m_stepsize)
 		{
-			//nbSum += yUpper(newx*h, nyp*h);
-			bSum += yUpper(x*h, yp*h);
+			nbSum += yUpper(newx*h, nyp*h);
+			bSum += yUpper(x, yp);
 			fourthOnBound = true;
 		}
 
 		B[i] = bSum;
-		//nb[i] = nbSum;
+		nb[i] = nbSum;
 		//===================== END GENERATE B VALUE ===========================
 
 
 		//=================== FILL IN MATRIX =======================
 		//mapping equation -----> col = ( ((y/h)-1) * (m_stepsize-1) ) + (x/h) - 1 
 		A[i][i] = 1; //diagonal is always 1
-		//nA[i][i] = 1;
+		nA[i][i] = 1;
 		unsigned col;
-		//unsigned ncol;
+		unsigned ncol;
 		if (!firstOnBound)
 		{
 			//xm   y
-			col = static_cast<unsigned>((((y) - 1) * (m_stepsize - 1)) + (xm) - 1);
+			col = static_cast<unsigned>((((y / h) - 1) * (m_stepsize - 1)) + (xm / h) - 1);
 			A[i][col] = -h;
-			//ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxm*h) / h) - 1);
-			//nA[i][ncol] = -h;
+			ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxm*h) / h) - 1);
+			nA[i][ncol] = -h;
 		}
 		if (!secOnBound)
 		{
 			//xp   y
-			col = static_cast<unsigned>((((y ) - 1) * (m_stepsize - 1)) + (xp ) - 1);
+			col = static_cast<unsigned>((((y / h) - 1) * (m_stepsize - 1)) + (xp / h) - 1);
 			A[i][col] = -h;
-			//ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxp*h) / h) - 1);
-			//nA[i][ncol] = -h;
+			ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxp*h) / h) - 1);
+			nA[i][ncol] = -h;
 		}
 		if (!thirdOnBound)
 		{
 			//x   ym
-			col = static_cast<unsigned>((((ym ) - 1) * (m_stepsize - 1)) + (x ) - 1);
+			col = static_cast<unsigned>((((ym / h) - 1) * (m_stepsize - 1)) + (x / h) - 1);
 			A[i][col] = -h;
-			//ncol = static_cast<unsigned>(((((nym*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
-			//nA[i][ncol] = -h;
+			ncol = static_cast<unsigned>(((((nym*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
+			nA[i][ncol] = -h;
 		}
 		if (!fourthOnBound)
 		{
 			//x   yp
-			col = static_cast<unsigned>((((yp ) - 1) * (m_stepsize - 1)) + (x ) - 1);
+			col = static_cast<unsigned>((((yp / h) - 1) * (m_stepsize - 1)) + (x / h) - 1);
 			A[i][col] = -h;
-			//ncol = static_cast<unsigned>(((((nyp*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
-			//nA[i][ncol] = -h;
+			ncol = static_cast<unsigned>(((((nyp*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
+			nA[i][ncol] = -h;
 		}
 		//=============================================================
 
@@ -213,15 +213,15 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 		//======================== UPDATE X AND Y ============================
 		//update "x" and "y" as needed
 		cout << "(x,y) = " << "(" << x << "," << y << ")" << "     i = " << i << endl;
-		//cout << "(newx,newy) = " << "(" << newx * h << "," << newy * h << ")" << "     i = " << i << endl;
-		x += 1;
-		//newx += 1;
-		if (x == m_stepsize)
+		cout << "(newx,newy) = " << "(" << newx * h << "," << newy * h << ")" << "     i = " << i << endl;
+		x += h;
+		newx += 1;
+		if (newx == m_stepsize)
 		{
-			x = 1;
-			y += 1;
-			//newx = 1;
-			//newy += 1;
+			x = h;
+			y += h;
+			newx = 1;
+			newy += 1;
 		}
 		//========================================================================
 
@@ -231,16 +231,16 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 	cout << "A = " << endl;
 	cout << A << endl;
 	cout << endl;
-	//cout << "nA = " << endl;
-	//cout << nA << endl;
+	cout << "nA = " << endl;
+	cout << nA << endl;
 
 
 	B = B * h;
 	cout << "B = " << endl;
 	cout << B << endl;
-	//nb = nb * h;
-	//cout << "nb = " << endl;
-	//cout << nb << endl;
+	nb = nb * h;
+	cout << "nb = " << endl;
+	cout << nb << endl;
 
 
 }
