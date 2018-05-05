@@ -27,6 +27,23 @@ denseMatrix<T>::denseMatrix(const unsigned size)
     }
 }
 
+
+template <typename T>
+denseMatrix<T>::denseMatrix(const unsigned height, const unsigned width)
+{
+    if(height == 0 && width != height)
+        throw std::invalid_argument("   -In denseMatrix(height,width), if height == 0, width must be equal to zero");
+    
+    this->m_height = height;
+    this->m_width = width;
+    m_data.resize(height);
+    for(int i = 0; i < m_data.getSize(); i++) //resize each row to width
+    {
+        m_data[i].resize(width);
+    }
+}
+
+
 template <typename T>
 denseMatrix<T>::denseMatrix(const Math_Vector<T>& vect)
 {
@@ -210,6 +227,53 @@ void denseMatrix<T>::operator = (const Math_Vector<Math_Vector<T>>& rhs)
     this->m_width = rhs[0].getSize();
     m_data = rhs;
     return;
+}
+
+
+
+template <typename T>
+void denseMatrix<T>::rowInterchange(const unsigned rowIndex1, const unsigned rowIndex2)
+{
+    if(rowIndex1 >= this->m_height || rowIndex2 >= this->m_height)
+        throw std::invalid_argument("   -In denseMatrix::rowInterhchange(), rowIndex1 or rowIndex2 is >= the matrix height");
+
+    std::swap(m_data[rowIndex1],m_data[rowIndex2]);
+    return;
+}
+
+
+template <typename T>
+void denseMatrix<T>::rowAddition(const unsigned rowIndex1, const unsigned rowIndex2, const T& scalar)
+{
+    if(rowIndex1 >= this->m_height || rowIndex2 >= this->m_height)
+        throw std::invalid_argument("   -In denseMatrix::rowAddition(), rowIndex1 or rowIndex2 is >= the matrix height");
+    if(rowIndex1 == rowIndex2)
+        throw std::invalid_argument("   -In denseMatrix::rowAddition(), a row cannot be added to itself");
+
+    m_data[rowIndex1] = m_data[rowIndex1] + (m_data[rowIndex2] * scalar);
+    return;
+}
+
+
+template <typename T>
+void denseMatrix<T>::rowMult(const unsigned rowIndex, const T& scalar)
+{
+    if(rowIndex >= this->m_height)
+        throw std::invalid_argument("   -In Matrix::rowMult, rowIndex must be < m_height");
+
+    m_data[rowIndex] = m_data[rowIndex] * scalar;
+    return;
+}
+
+
+template <typename T>
+denseMatrix<T>& denseMatrix<T>::operator = (const denseMatrix<T>& rhs)
+{
+    this->m_width = rhs.getWidth();
+    this->m_height = rhs.getHeight();
+    m_data = rhs.m_data;
+
+    return (*this);
 }
 
 

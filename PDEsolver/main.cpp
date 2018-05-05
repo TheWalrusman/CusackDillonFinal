@@ -1,204 +1,118 @@
 #include <iostream>
-#include "Math_Vector.h"
+#include <fstream>
+#include <ctime>
+#include <iomanip>
+#include "absMatrix.h"
 #include "denseMatrix.h"
+#include "Math_Vector.h"
+#include "steepestDescent.h"
+#include "symmetricMatrix.h"
+#include "GaussSeidel.h"
+#include "GaussianInverse.h"
 using namespace std;
-
-double xLower (const double x, const double y)
-{
-    return 0*x*y;
-}
-
-double xUpper (const double x, const double y)
-{
-    return 0*x*y;//
-}
-
-double yLower (const double x, const double y)
-{
-    return ( 1 - (4*(x-0.5)*(x-0.5)) ) + 0*y; 
-}
-
-double yUpper (const double x, const double y)
-{
-    return 0*x*y;
-}
 
 
 int main(int argc, char* argv[])
 {
-    if(argc){}
+    /*
+    ifstream in;
 
-    unsigned n = atoi(argv[1]);
-    double h = (1.0/n);
-    double x = h;
-    double y = h;
-    double xp;
-    double xm;
-    double yp;
-    double ym;
-    double bSum;
-    bool firstOnBound;
-    bool secOnBound;
-    bool thirdOnBound;
-    bool fourthOnBound;
-    Math_Vector<double> b;
-    denseMatrix<double> A((n-1)*(n-1));
-    b.resize((n-1)*(n-1));
+    GaussSeidel gsSolver;
+    GaussianInverse gauInverse;
 
-    //"i" is the row of the symmetric matrix
-    for(unsigned i = 0; i < (n-1)*(n-1); i++)
-    {
+    denseMatrix<double> inverseTest(3);
+    denseMatrix<double> invTest2(3);
+    denseMatrix<double> invTest3(3);
 
-        //===== GENERATE THE PARAM VALUES USED IN EQUATION ======
-        xp = x+h;
-        xm = x-h;
-        yp = y+h;
-        ym = y-h;
-        //====================================================== 
+    symmetricMatrix<double> A(10);
+    Math_Vector<double> b(10);
+
+    in.open("inverseTestCases.txt");
+        in >> inverseTest;
+        in >> invTest2;
+        in >> invTest3;
+    in.close();
+
+    in.open("gaussSeidelTest.txt");
+        in >> A;
+        in >> b;
+    in.close();
 
 
-        //============ ASSUME NO TERMS ARE ON BOUNDARY AT FIRST =====
-        firstOnBound = false;
-        secOnBound = false;
-        thirdOnBound = false;
-        fourthOnBound = false;
-        //======================================================
+    cout << inverseTest << endl;
+    cout << invTest2 << endl;
+    cout << invTest3 << endl;
 
+    cout << inverseTest * gauInverse(inverseTest) << endl;
+    cout << invTest2 * gauInverse(invTest2) << endl;
+    cout << invTest3 * gauInverse(invTest3) << endl;
 
-        //================= GENERATE THE NUMBER THAT NEEDS TO GO INTO THE B VECTOR =========
-        bSum = 0;
-        //see third and forth term
-        if(x == 0)
-        {
-            bSum += xLower(x,ym);
-            bSum += xLower(x,yp);
-            thirdOnBound = true;
-            fourthOnBound = true;
-        }
-        if(x == 1)
-        {
-            bSum += xUpper(x,ym);
-            bSum += xUpper(x,yp);
-            thirdOnBound = true;
-            fourthOnBound = true;
-        }
-        //see first term
-        if(xm == 0)
-        {
-            bSum += xLower(xm,y);
-            firstOnBound = true;
-        }
-        if(xm == 1)
-        {
-            bSum += xUpper(xm,y);
-            firstOnBound = true;
-        }
-        //see second term
-        if(xp == 0)
-        {
-            bSum += xLower(xp,y);
-            secOnBound = true;
-        }
-        if(xp == 1)
-        {
-            bSum += xUpper(xp,y);
-            secOnBound = true;
-        }
-        //see first and second term
-        if(y == 0)
-        {
-            bSum += yLower(xm,y);
-            bSum += yLower(xp,y);
-            firstOnBound = true;
-            secOnBound = true;
-        }
-        if(y == 1)
-        {
-            bSum += yUpper(xm,y);
-            bSum += yUpper(xp,y);
-            firstOnBound = true;
-            secOnBound = true;
-        }
-        //see third term
-        if(ym == 0)
-        {
-            bSum += yLower(x,ym);
-            thirdOnBound = true;
-        }
-        if(ym == 1)
-        {
-            bSum += yUpper(x,ym);
-            thirdOnBound = true;
-        }
-        //see fourth term
-        if(yp == 0)
-        {
-            bSum += yLower(x,yp);
-            fourthOnBound = true;
-        }
-        if(yp == 1)
-        {
-            bSum += yUpper(x,yp);
-            fourthOnBound = true;
-        }
-
-        b[i] = bSum;
-        //===================== END GENERATE B VALUE ===========================
-
-      
-        //=================== FILL IN MATRIX =======================
-        //mapping equation -----> col = ( ((y/h)-1) * (n-1) ) + (x/h) - 1 
-        A[i][i] = 1; //diagonal is always 1
-        unsigned col;
-        if(!firstOnBound)
-        {
-            //xm   y
-            col = static_cast<unsigned>( ( ((y/h)-1) * (n-1) ) + (xm/h) - 1 );
-            A[i][col] = -h;
-        }
-        if(!secOnBound)
-        {
-            //xp   y
-            col = static_cast<unsigned>( ( ((y/h)-1) * (n-1) ) + (xp/h) - 1 );
-            A[i][col] = -h;
-        }
-        if(!thirdOnBound)
-        {
-            //x   ym
-            col = static_cast<unsigned>( ( ((ym/h)-1) * (n-1) ) + (x/h) - 1 );
-            A[i][col] = -h;
-        }
-        if(!fourthOnBound)
-        {
-            //x   yp
-            col = static_cast<unsigned>( ( ((yp/h)-1) * (n-1) ) + (x/h) - 1 );
-            A[i][col] = -h;
-        }
-        //=============================================================
-
-
-
-        //======================== UPDATE X AND Y ============================
-        //update "x" and "y" as needed
-        cout << "(x,y) = " << "(" << x << "," << y << ")" << "     i = " << i << endl;
-        x += h;
-        if(x >=0.999999)
-        {
-            x = h;
-            y += h;
-        }
-        //========================================================================
-
-    }
-
-    cout << endl;
+    cout << endl << endl << endl;
     cout << "A = " << endl;
     cout << A << endl;
+    cout << "B = " << endl;
+    cout << b << endl;
+    cout << "x (approximation) = " << endl;
+    cout << gsSolver(A,b) << endl;
+    */
 
+    cout << setprecision(10);
 
-    b = b * h;
+    if(argc != 2)
+        throw std::invalid_argument("Incorrect number of command line args");
+
+    //1) get A and b dimensions from user
+    int dimensions = atoi(argv[1]);
+    cout << endl << "dimensions = " << dimensions << endl;
+
+    //2) generate random A
+    srand(time(NULL));
+    symmetricMatrix<double> A(dimensions);
+    for(unsigned i = 0; i < A.getHeight(); i++) //for each row of A
+    {
+        for(unsigned j = 0; j <= i; j++) //for each column up to the diagonal of the row
+        {
+            if(j == i)
+            {
+                double number = static_cast<double>((rand() % 10000) + 123456.0f);
+                double decimal = (static_cast<double>(rand()%100)/100.0f);
+                cout << number << endl;
+                cout << decimal << endl;
+                cout << (number + decimal) << endl;
+                A.getRef(i,j) = ((rand() % 10000) + 123456) + static_cast<double>(rand()%1000000)/1000000; //force A to be diagonally dominate
+            }
+            else
+            {
+                A.getRef(i,j) = ((rand() % 10000)) + static_cast<double>(rand()%1000000)/1000000;
+            }
+        }
+    }
+    
+    //3) generate random b
+    Math_Vector<double> b(dimensions);
+    for(int i = 0; i < b.getSize(); i++)
+        b[i] = ((rand() % 10000)) + static_cast<double>(rand()%1000000)/1000000;
+    
+    //4) calculate x approximation
+    GaussSeidel gsSolver;
+    Math_Vector<double> Xapprox(dimensions);
+    Xapprox = gsSolver(A,b);
+
+    //5) output A
+    cout << endl << "A = " << endl;
+    cout << A << endl;
+
+    //6) output b
     cout << "b = " << endl;
     cout << b << endl;
+
+    //7) output (A * Xapprox)   (This should b almost equal or exactly equal to b)
+    cout << "(A * Xapprox) = " << endl;
+    cout << (A*Xapprox) << endl;
+
+    //8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
+    cout << "(b - (A*Xapprox)) = " << endl;
+    cout << (b - (A*Xapprox)) << endl;
 
     return 0;
 }

@@ -12,7 +12,6 @@
 #include <fstream>
 #include <vector>
 #include "Math_Vector.h"
-#include "absMatrix.h"
 using namespace std;
 
 
@@ -52,6 +51,15 @@ class denseMatrix : public absMatrix<T>
             \post m_width == size, m_height == size, m_data is resized to "size", m_data[i] is resized to "size" for each index "i" in m_data
         */
         denseMatrix(const unsigned size);
+
+
+
+
+
+        denseMatrix(const unsigned height, const unsigned width);
+
+
+
 
 
         /*!
@@ -191,6 +199,20 @@ class denseMatrix : public absMatrix<T>
             \throws std::invalid_argument if rhs.getSize() < 1 or rhs[0].getSize() < 1
         */
         void operator = (const Math_Vector<Math_Vector<T>>& rhs);
+
+
+
+        void rowInterchange(const unsigned rowIndex1, const unsigned rowIndex2);
+
+
+        void rowAddition(const unsigned rowIndex1, const unsigned rowIndex2, const T& scalar = 1);        
+
+
+
+        void rowMult(const unsigned rowIndex, const T& scalar);
+
+
+        denseMatrix<T>& operator = (const denseMatrix<T>& rhs);
 
 
         /*!
