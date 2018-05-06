@@ -2,6 +2,7 @@
     \file
     This is the header file for the abstract base matrix library
     \brief Header file for the matrix abstract base class
+    \author Myles Dillon and Kyle Cusack
 */
 
 #ifndef ABSMATRIX_H

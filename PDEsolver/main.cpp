@@ -1,204 +1,78 @@
 #include <iostream>
-#include "Math_Vector.h"
+#include <fstream>
+#include <ctime>
+#include <iomanip>
+#include "absMatrix.h"
 #include "denseMatrix.h"
+#include "Math_Vector.h"
+#include "steepestDescent.h"
+#include "symmetricMatrix.h"
+#include "GaussSeidel.h"
+#include "GaussianInverse.h"
+#include "CenterDiffMesh.h"
+#include "boundaryFunctions.h"
 using namespace std;
 
-double xLower (const double x, const double y)
-{
-    return 0*x*y;
-}
-
-double xUpper (const double x, const double y)
-{
-    return 0*x*y;//
-}
-
-double yLower (const double x, const double y)
-{
-    return ( 1 - (4*(x-0.5)*(x-0.5)) ) + 0*y; 
-}
-
-double yUpper (const double x, const double y)
-{
-    return 0*x*y;
-}
 
 
 int main(int argc, char* argv[])
 {
-    if(argc){}
-
-    unsigned n = atoi(argv[1]);
-    double h = (1.0/n);
-    double x = h;
-    double y = h;
-    double xp;
-    double xm;
-    double yp;
-    double ym;
-    double bSum;
-    bool firstOnBound;
-    bool secOnBound;
-    bool thirdOnBound;
-    bool fourthOnBound;
-    Math_Vector<double> b;
-    denseMatrix<double> A((n-1)*(n-1));
-    b.resize((n-1)*(n-1));
-
-    //"i" is the row of the symmetric matrix
-    for(unsigned i = 0; i < (n-1)*(n-1); i++)
+    try
     {
-
-        //===== GENERATE THE PARAM VALUES USED IN EQUATION ======
-        xp = x+h;
-        xm = x-h;
-        yp = y+h;
-        ym = y-h;
-        //====================================================== 
-
-
-        //============ ASSUME NO TERMS ARE ON BOUNDARY AT FIRST =====
-        firstOnBound = false;
-        secOnBound = false;
-        thirdOnBound = false;
-        fourthOnBound = false;
-        //======================================================
-
-
-        //================= GENERATE THE NUMBER THAT NEEDS TO GO INTO THE B VECTOR =========
-        bSum = 0;
-        //see third and forth term
-        if(x == 0)
-        {
-            bSum += xLower(x,ym);
-            bSum += xLower(x,yp);
-            thirdOnBound = true;
-            fourthOnBound = true;
-        }
-        if(x == 1)
-        {
-            bSum += xUpper(x,ym);
-            bSum += xUpper(x,yp);
-            thirdOnBound = true;
-            fourthOnBound = true;
-        }
-        //see first term
-        if(xm == 0)
-        {
-            bSum += xLower(xm,y);
-            firstOnBound = true;
-        }
-        if(xm == 1)
-        {
-            bSum += xUpper(xm,y);
-            firstOnBound = true;
-        }
-        //see second term
-        if(xp == 0)
-        {
-            bSum += xLower(xp,y);
-            secOnBound = true;
-        }
-        if(xp == 1)
-        {
-            bSum += xUpper(xp,y);
-            secOnBound = true;
-        }
-        //see first and second term
-        if(y == 0)
-        {
-            bSum += yLower(xm,y);
-            bSum += yLower(xp,y);
-            firstOnBound = true;
-            secOnBound = true;
-        }
-        if(y == 1)
-        {
-            bSum += yUpper(xm,y);
-            bSum += yUpper(xp,y);
-            firstOnBound = true;
-            secOnBound = true;
-        }
-        //see third term
-        if(ym == 0)
-        {
-            bSum += yLower(x,ym);
-            thirdOnBound = true;
-        }
-        if(ym == 1)
-        {
-            bSum += yUpper(x,ym);
-            thirdOnBound = true;
-        }
-        //see fourth term
-        if(yp == 0)
-        {
-            bSum += yLower(x,yp);
-            fourthOnBound = true;
-        }
-        if(yp == 1)
-        {
-            bSum += yUpper(x,yp);
-            fourthOnBound = true;
-        }
-
-        b[i] = bSum;
-        //===================== END GENERATE B VALUE ===========================
-
-      
-        //=================== FILL IN MATRIX =======================
-        //mapping equation -----> col = ( ((y/h)-1) * (n-1) ) + (x/h) - 1 
-        A[i][i] = 1; //diagonal is always 1
-        unsigned col;
-        if(!firstOnBound)
-        {
-            //xm   y
-            col = static_cast<unsigned>( ( ((y/h)-1) * (n-1) ) + (xm/h) - 1 );
-            A[i][col] = -h;
-        }
-        if(!secOnBound)
-        {
-            //xp   y
-            col = static_cast<unsigned>( ( ((y/h)-1) * (n-1) ) + (xp/h) - 1 );
-            A[i][col] = -h;
-        }
-        if(!thirdOnBound)
-        {
-            //x   ym
-            col = static_cast<unsigned>( ( ((ym/h)-1) * (n-1) ) + (x/h) - 1 );
-            A[i][col] = -h;
-        }
-        if(!fourthOnBound)
-        {
-            //x   yp
-            col = static_cast<unsigned>( ( ((yp/h)-1) * (n-1) ) + (x/h) - 1 );
-            A[i][col] = -h;
-        }
-        //=============================================================
+        cout << setprecision(8);
+    
+        if(argc != 2)
+            throw std::invalid_argument("The must be at exactly two command line arguments");
+    
+    
+        int numOfSubDivisions = atoi(argv[1]); //control mesh density
+        symmetricMatrix<double> A;              //A whose values will be generated by CenterDiffMesh
+        Math_Vector<double> b;                  //b whose values will be generated by CenterDiffMesh
+        Math_Vector<double> xApprox((numOfSubDivisions-1)*(numOfSubDivisions-1));  //holds the results of iterative methods
+        CenterDiffMesh<double,double,double, xLower, xUpper, yLower, yUpper> dirichlet; //constructs A and b
+        steepestDescent steepDescent;
+        GaussSeidel gausSied;
+        double errTollerance = 0.00000001;
+    
+        dirichlet.setSubdivisions(numOfSubDivisions);
+        dirichlet(A,b);
+    
+        cout << "A = " << endl;
+        cout << A << endl;
+    
+        cout << "=== Steepest Descent ===" << endl;
+        steepDescent.setTollerance(errTollerance);
+        xApprox = steepDescent(A,b);
+        cout << "x = " << endl;
+        cout << xApprox << endl;
+        cout << "b = " << endl;
+        cout << b << endl;
+        cout << "A*x = " << endl;
+        cout << A*xApprox << endl;
+    
+        cout << "=== Gauss Seidel ===" << endl;
+        gausSied.setTollerance(errTollerance);
+        xApprox = gausSied(A,b);
+        cout << "x = " << endl;
+        cout << xApprox << endl;
+        cout << "b = " << endl;
+        cout << b << endl;
+        cout << "A*x = " << endl;
+        cout << A*xApprox << endl;
 
 
-
-        //======================== UPDATE X AND Y ============================
-        //update "x" and "y" as needed
-        cout << "(x,y) = " << "(" << x << "," << y << ")" << "     i = " << i << endl;
-        x += h;
-        if(x >=0.999999)
-        {
-            x = h;
-            y += h;
-        }
-        //========================================================================
-
+        cout << "=== Comparison ===" << endl;
+        cout << " Iterations (Gauss-Seidel) = .................. " << gausSied.getFinalIterations() << endl;
+        cout << " Iterations (Steepest Descent) = .............. " << steepDescent.getFinalIterations() << endl;
+        cout << " Tollerance (for both)......................... " << errTollerance << endl;
+        cout << " Final approx error magnitude (Gauss-Seidel) =  " << gausSied.getFinalResidualMag() << endl;
+        cout << " Final approx error (Steepest Descent) = ...... " << steepDescent.getFinalResidualMag() << endl;
+        cout << endl << endl;
     }
-
-    cout << endl;
-    cout << "A = " << endl;
-    cout << A << endl;
-
-
-    b = b * h;
-    cout << "b = " << endl;
-    cout << b << endl;
+    catch(std::invalid_argument& e)
+    {
+        cout << e.what() << endl;
+    }
 
     return 0;
 }

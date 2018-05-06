@@ -2,7 +2,7 @@
     \file
     This is the header file for the denseMatrix Library
     \brief Header file for the denseMatrix<T> class
-
+    \author Myles Dillon and Kyle Cusack
 */
 
 #ifndef DENSEMATRIX_H
@@ -12,7 +12,6 @@
 #include <fstream>
 #include <vector>
 #include "Math_Vector.h"
-#include "absMatrix.h"
 using namespace std;
 
 
@@ -22,7 +21,7 @@ using namespace std;
     contained within row x and column y of the denseMatrix.
 
     \date 3/26/18
-    \author Myles Dillon
+    \author Myles Dillon and Kyle Cusack
     \brief Template dense matrix class
 */
 template <class T>
@@ -52,6 +51,19 @@ class denseMatrix : public absMatrix<T>
             \post m_width == size, m_height == size, m_data is resized to "size", m_data[i] is resized to "size" for each index "i" in m_data
         */
         denseMatrix(const unsigned size);
+
+
+
+
+        /*!
+            A constructor that allows for a custom height and width
+            \pre none
+            \post m_height == height, m_width == width
+        */
+        denseMatrix(const unsigned height, const unsigned width);
+
+
+
 
 
         /*!
@@ -191,6 +203,42 @@ class denseMatrix : public absMatrix<T>
             \throws std::invalid_argument if rhs.getSize() < 1 or rhs[0].getSize() < 1
         */
         void operator = (const Math_Vector<Math_Vector<T>>& rhs);
+
+
+        /*!
+            A function for caring out matrix row interchanges on a matrix.
+            \pre rowIndex1 and rowIndex2 < m_height,
+                T = T (assignment) defined since this function calls std::swap(Math_Vector<T>,Math_Vector<T>)
+            \post std::swap is called with m_data[rowIndex1] and m_data[rowIndex2] so that the contents of two rows in the matrix are swapped entry for entry
+            \throws std::invalid_argument if rowIndex1 or rowIndex2 are >= m_height
+        */
+        void rowInterchange(const unsigned rowIndex1, const unsigned rowIndex2);
+
+
+        /*!
+            A function for matrix rowAddition.
+            \pre T * T (multiplication) defined, T + T (addition) defined, T = T (assignment) defined, rowIndex1 and rowIndex2 < m_height, rowIndex != rowIndex2
+            \post m_data[rowIndex1] == m_data[rowIndex1] + (m_data[rowIndex2] * scalar)
+            \throws std::invalid_argument if rowIndex1 and rowIndex2 do not meet their pre-conditions
+        */
+        void rowAddition(const unsigned rowIndex1, const unsigned rowIndex2, const T& scalar = 1);        
+
+
+        /*!
+            A function for multiplying a row of a matrix by a scalar value
+            \pre T = T (assignment) defined, T * T (multiplication) defined, rowIndex < m_height
+            \post m_data[rowIndex] == (m_data[rowIndex] * scalar) (the row specified by rowIndex is scalar multiplied)
+            \throws std::invalid_argument if rowIndex >= m_height
+        */
+        void rowMult(const unsigned rowIndex, const T& scalar);
+
+
+        /*!
+            Assingment operator for dense matrices
+            \pre none
+            \post m_width == rhs.m_width, m_height == rhs.m_height, m_data == rhs.m_data
+        */
+        denseMatrix<T>& operator = (const denseMatrix<T>& rhs);
 
 
         /*!

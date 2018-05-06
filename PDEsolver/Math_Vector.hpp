@@ -34,9 +34,11 @@ Math_Vector<T>::Math_Vector(const Math_Vector<T>& Math_VectorToCopy)
 template <typename T>
 Math_Vector<T>::Math_Vector(Math_Vector<T>&& other)
 {
+	//delete[] m_dataPtr;
     m_dataPtr = other.m_dataPtr;
     m_size = other.m_size;
 	other.m_dataPtr = NULL;
+	
 	other.m_size = 0;
 }
 
@@ -122,8 +124,13 @@ Math_Vector<T>& Math_Vector<T>::operator = (const Math_Vector<T>& rhs)
 template <typename T>
 Math_Vector<T>& Math_Vector<T>::operator = (Math_Vector<T>&& rhs)
 {
-    std::swap(m_dataPtr,rhs.m_dataPtr);
-    std::swap(m_size,rhs.m_size);
+	delete[] m_dataPtr;
+	m_dataPtr = rhs.m_dataPtr;
+	m_size = rhs.m_size;
+    //std::swap(m_dataPtr,rhs.m_dataPtr);
+    //std::swap(m_size,rhs.m_size);
+	rhs.m_dataPtr = NULL;
+	rhs.m_size = 0;
     return *this;
 }
 
