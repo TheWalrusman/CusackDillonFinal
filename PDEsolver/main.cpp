@@ -24,12 +24,12 @@ int main(int argc, char* argv[])
     /*
     ifstream in;
 
-    GaussSeidel gsSolver;
-    GaussianInverse gauInverse;
 double yLower(const double x, const double y)
 {
 	return (1 - (4 * (x - 0.5)*(x - 0.5))) + 0 * y;
 }
+    GaussSeidel gsSolver;
+    GaussianInverse gauInverse;
 
 double yUpper(const double x, const double y)
 {
