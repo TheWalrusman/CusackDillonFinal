@@ -32,7 +32,7 @@ bool absMatrix<T>::diagonallyDominate () const
         }
         rowSum -= abs((*this)(i,i)); //subtract out the diagonal element
 
-        if(abs((*this)(i,i)) <= rowSum) //if row is not diagonally dominate
+        if(abs((*this)(i,i)) < rowSum) //if row is not diagonally dominate
         {
             diagDominate = false;
             break;

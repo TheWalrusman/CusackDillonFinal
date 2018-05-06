@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
     cout << "x (approximation) = " << endl;
     cout << gsSolver(A,b) << endl;
     */
-	denseMatrix<double> AA;
+	symmetricMatrix<double> AA;
 	Math_Vector<double> bb;
 	CenterDiffMesh<double, double, double, xLower, xUpper, yLower, yUpper> dirichlet;
 	dirichlet.setSubdivisions(atoi(argv[1]));
@@ -123,23 +123,28 @@ int main(int argc, char* argv[])
     //4) calculate x approximation
     GaussSeidel gsSolver;
     Math_Vector<double> Xapprox(dimensions);
-    Xapprox = gsSolver(A,b);
+    Xapprox = gsSolver(AA,bb);
 
     //5) output A
     cout << endl << "A = " << endl;
-    cout << A << endl;
+    cout << AA << endl;
+
+	
 
     //6) output b
     cout << "b = " << endl;
-    cout << b << endl;
+    cout << bb << endl;
 
     //7) output (A * Xapprox)   (This should b almost equal or exactly equal to b)
     cout << "(A * Xapprox) = " << endl;
-    cout << (A*Xapprox) << endl;
+    cout << (AA*Xapprox) << endl;
 
     //8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
     cout << "(b - (A*Xapprox)) = " << endl;
-    cout << (b - (A*Xapprox)) << endl;
+    cout << (bb - (AA*Xapprox)) << endl;
 
+	//9) output Xapprox
+	cout << endl << "Xapprox = " << endl;
+	cout << Xapprox << endl;
     return 0;
 }
