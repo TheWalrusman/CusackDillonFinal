@@ -128,48 +128,48 @@ int main(int argc, char* argv[])
 	Math_Vector<double> XapproxSD(dimensions);
     Xapprox = gsSolver(AA,bb);
 	XapproxGS = Xapprox;
-    //5) output A
-    cout << endl << "A = " << endl;
-    cout << AA << endl;
+ //   //5) output A
+ //   cout << endl << "A = " << endl;
+ //   //cout << AA << endl;
 
-	
+	//
 
-    //6) output b
-    cout << "b = " << endl;
-    cout << bb << endl;
+ //   //6) output b
+ //   cout << "b = " << endl;
+ //   //cout << bb << endl;
 
-    //7) output (A * Xapprox)   (This should b almost equal or exactly equal to b)
-    cout << "(A * Xapprox) = " << endl;
-    cout << (AA*Xapprox) << endl;
+ //   //7) output (A * Xapprox)   (This should b almost equal or exactly equal to b)
+ //   cout << "(A * Xapprox) = " << endl;
+ //   //cout << (AA*Xapprox) << endl;
 
-    //8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
-    cout << "(b - (A*Xapprox)) = " << endl;
-    cout << (bb - (AA*Xapprox)) << endl;
+ //   //8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
+ //   cout << "(b - (A*Xapprox)) = " << endl;
+ //   //cout << (bb - (AA*Xapprox)) << endl;
 
-	//9) output Xapprox
-	cout << endl << "Xapprox = " << endl;
-	cout << Xapprox << endl;
-	//5) output A
-	cout << endl << "A = " << endl;
-	cout << AA << endl;
+	////9) output Xapprox
+	//cout << endl << "Xapprox = " << endl;
+	////cout << Xapprox << endl;
+	////5) output A
+	//cout << endl << "A = " << endl;
+	////cout << AA << endl;
 
 	Xapprox = sdSolver(AA, bb);
 	XapproxSD = Xapprox;
 	//6) output b
 	cout << "b = " << endl;
-	cout << bb << endl;
+	//cout << bb << endl;
 
 	//7) output (A * Xapprox)   (This should b almost equal or exactly equal to b)
-	cout << "(A * Xapprox) = " << endl;
-	cout << (AA*Xapprox) << endl;
+	//cout << "(A * Xapprox) = " << endl;
+	//cout << (AA*Xapprox) << endl;
 
 	//8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
-	cout << "(b - (A*Xapprox)) = " << endl;
-	cout << (bb - (AA*Xapprox)) << endl;
+	//cout << "(b - (A*Xapprox)) = " << endl;
+	//cout << (bb - (AA*Xapprox)) << endl;
 
 	//9) output Xapprox
-	cout << endl << "Xapprox = " << endl;
-	cout << Xapprox << endl;
+	//cout << endl << "Xapprox = " << endl;
+	//cout << Xapprox << endl;
 
 	//10) output Gauss-Sidel and Steepest Descent
 	cout << endl << "Gauss-Sidel = " << endl;
@@ -177,6 +177,38 @@ int main(int argc, char* argv[])
 
 	cout << endl << "Steepest-Descent = " << endl;
 	cout << XapproxSD << endl;
-
+	int counter = 1;
+	int ycount = dimensions-1;
+	//cout << 0 << " , ";
+	/*for (double i = 1; i < dimensions; i++)
+	{
+		if(i != dimensions - 1)
+			cout << (double)(i*(1 / (double)(dimensions ))) << " , ";
+		else
+		{
+			cout << (double)(i*(1 / (double)(dimensions )))<<endl;
+		}
+	}*/
+	cout << endl << endl;
+	for (int i = Xapprox.getSize()-1; i >= 0; i--)
+	{
+		if (counter == 1)
+		{
+			cout << (double)((ycount)*(1 / (double)(dimensions))) << " , ";
+			ycount--;
+		}
+			
+		if (counter != dimensions-1)
+			cout << Xapprox[i] << " , ";
+		else
+		{
+			cout << Xapprox[i]<<endl;
+		}
+		if (counter == dimensions - 1)
+		{
+			counter = 0;
+		}
+		counter++;
+	}
     return 0;
 }

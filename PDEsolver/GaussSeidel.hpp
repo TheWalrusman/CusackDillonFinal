@@ -16,7 +16,7 @@ Math_Vector<T> GaussSeidel::operator () (const symmetricMatrix<T>& A, const Math
     GaussianInverse inverse;                //find the inverse of L using gaussian elimination
     //generate lower matrix part of matrix A
 	L = L * 0;
-	cout << endl << L << endl;
+	//cout << endl << L << endl;
     for(unsigned i = 0; i < A.getHeight(); i++)
     {
 		for (unsigned j = 0; j <= i; j++)
@@ -25,7 +25,7 @@ Math_Vector<T> GaussSeidel::operator () (const symmetricMatrix<T>& A, const Math
 			//cout << endl << L[i][j] << endl;
 		}
     }
-	cout << endl << L << endl;
+	//cout << endl << L << endl;
 	U = U * 0;
     //generate upper matrix part of matrix A
     for(unsigned i = 0; i < A.getHeight(); i++)
@@ -33,7 +33,7 @@ Math_Vector<T> GaussSeidel::operator () (const symmetricMatrix<T>& A, const Math
         for(unsigned j = i+1; j < A.getWidth(); j++)
             U[i][j] = A(i,j);
     }
-	cout << endl << U << endl;
+	//cout << endl << U << endl;
     //make the zero vector the intial guess
     for(unsigned i = 0; i < static_cast<unsigned>(Xapprox.getSize()); i++)
         Xapprox[i] = 0;
@@ -41,7 +41,7 @@ Math_Vector<T> GaussSeidel::operator () (const symmetricMatrix<T>& A, const Math
     negU = U * -1;
     invL = inverse(L).getRows();
 
-    for(unsigned i = 0; i < 100000; i++)
+    for(unsigned i = 0; i < 100; i++)
     {
         Xapprox = invL * ((negU*Xapprox) + b);
     }
