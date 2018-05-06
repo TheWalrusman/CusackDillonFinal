@@ -1,4 +1,13 @@
 template <typename T>
+symmetricMatrix<T>::symmetricMatrix()
+{
+    this->m_width = 0;
+    this->m_height = 0;
+    m_data.resize(0);
+}
+
+
+template <typename T>
 symmetricMatrix<T>::symmetricMatrix(const unsigned size)
 {
     if(size < 1)

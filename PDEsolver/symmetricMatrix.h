@@ -22,6 +22,12 @@ class symmetricMatrix : public absMatrix<T>
     public:
         
 
+
+        symmetricMatrix ();
+
+
+
+
         /*!
             constructor for creating a square matrix
             \pre size >= 1
