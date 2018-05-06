@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClInclude Include="absMatrix.h" />
     <ClInclude Include="absMatrix.hpp" />
+    <ClInclude Include="CenterDiffMesh.h" />
     <ClInclude Include="denseMatrix.h" />
     <ClInclude Include="denseMatrix.hpp" />
     <ClInclude Include="Math_Vector.h" />
