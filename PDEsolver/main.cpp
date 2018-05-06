@@ -121,10 +121,13 @@ int main(int argc, char* argv[])
         b[i] = ((rand() % 10000)) + static_cast<double>(rand()%1000000)/1000000;
     
     //4) calculate x approximation
+	steepestDescent sdSolver;
     GaussSeidel gsSolver;
     Math_Vector<double> Xapprox(dimensions);
+	Math_Vector<double> XapproxGS(dimensions);
+	Math_Vector<double> XapproxSD(dimensions);
     Xapprox = gsSolver(AA,bb);
-
+	XapproxGS = Xapprox;
     //5) output A
     cout << endl << "A = " << endl;
     cout << AA << endl;
@@ -146,5 +149,34 @@ int main(int argc, char* argv[])
 	//9) output Xapprox
 	cout << endl << "Xapprox = " << endl;
 	cout << Xapprox << endl;
+	//5) output A
+	cout << endl << "A = " << endl;
+	cout << AA << endl;
+
+	Xapprox = sdSolver(AA, bb);
+	XapproxSD = Xapprox;
+	//6) output b
+	cout << "b = " << endl;
+	cout << bb << endl;
+
+	//7) output (A * Xapprox)   (This should b almost equal or exactly equal to b)
+	cout << "(A * Xapprox) = " << endl;
+	cout << (AA*Xapprox) << endl;
+
+	//8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
+	cout << "(b - (A*Xapprox)) = " << endl;
+	cout << (bb - (AA*Xapprox)) << endl;
+
+	//9) output Xapprox
+	cout << endl << "Xapprox = " << endl;
+	cout << Xapprox << endl;
+
+	//10) output Gauss-Sidel and Steepest Descent
+	cout << endl << "Gauss-Sidel = " << endl;
+	cout << XapproxGS << endl;
+
+	cout << endl << "Steepest-Descent = " << endl;
+	cout << XapproxSD << endl;
+
     return 0;
 }
