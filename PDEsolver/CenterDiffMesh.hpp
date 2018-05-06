@@ -16,6 +16,7 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 
 	//unsigned m_stepsize = atoi(argv[1]);
 	double h = 1.0 / (m_stepsize);
+	double onefourth = 1.0 / 4.0;
 	//double stepsize = 1.0 / (m_stepsize);
 	//double newx = 1;
 	double x = 1;
@@ -178,34 +179,34 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 		{
 			//xm   y
 			col = static_cast<unsigned>((((y) - 1) * (m_stepsize - 1)) + (xm) - 1);
-			A[i][col] = -h;
+			A[i][col] = -onefourth;
 			//ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxm*h) / h) - 1);
 			//nA[i][ncol] = -h;
 		}
-		if (!secOnBound)
-		{
-			//xp   y
-			col = static_cast<unsigned>((((y ) - 1) * (m_stepsize - 1)) + (xp ) - 1);
-			A[i][col] = -h;
-			//ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxp*h) / h) - 1);
-			//nA[i][ncol] = -h;
-		}
+		//if (!secOnBound)
+		//{
+		//	//xp   y
+		//	col = static_cast<unsigned>((((y ) - 1) * (m_stepsize - 1)) + (xp ) - 1);
+		//	A[i][col] = -onefourth;
+		//	//ncol = static_cast<unsigned>(((((newy*h) / h) - 1) * (m_stepsize - 1)) + ((nxp*h) / h) - 1);
+		//	//nA[i][ncol] = -h;
+		//}
 		if (!thirdOnBound)
 		{
 			//x   ym
 			col = static_cast<unsigned>((((ym ) - 1) * (m_stepsize - 1)) + (x ) - 1);
-			A[i][col] = -h;
+			A[i][col] = -onefourth;
 			//ncol = static_cast<unsigned>(((((nym*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
 			//nA[i][ncol] = -h;
 		}
-		if (!fourthOnBound)
-		{
-			//x   yp
-			col = static_cast<unsigned>((((yp ) - 1) * (m_stepsize - 1)) + (x ) - 1);
-			A[i][col] = -h;
-			//ncol = static_cast<unsigned>(((((nyp*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
-			//nA[i][ncol] = -h;
-		}
+		//if (!fourthOnBound)
+		//{
+		//	//x   yp
+		//	col = static_cast<unsigned>((((yp ) - 1) * (m_stepsize - 1)) + (x ) - 1);
+		//	A[i][col] = -onefourth;
+		//	//ncol = static_cast<unsigned>(((((nyp*h) / h) - 1) * (m_stepsize - 1)) + ((newx*h) / h) - 1);
+		//	//nA[i][ncol] = -h;
+		//}
 		//=============================================================
 
 
@@ -227,7 +228,7 @@ void CenterDiffMesh<T, U, V, xLower, xUpper, yLower, yUpper>::operator()(denseMa
 
 	}
 
-	cout << endl;
+	cout <<secOnBound<<fourthOnBound<< endl;
 	cout << "A = " << endl;
 	cout << A << endl;
 	cout << endl;

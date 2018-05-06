@@ -9,6 +9,7 @@
 #include "symmetricMatrix.h"
 #include "GaussSeidel.h"
 #include "GaussianInverse.h"
+#include "CenterDiffMesh.h"
 using namespace std;
 
 double xLower(const double x, const double y)
@@ -17,24 +18,28 @@ double xLower(const double x, const double y)
 }
 
 double xUpper(const double x, const double y)
-int main(int argc, char* argv[])
 {
-	return 0 * x*y;//
+	return 0 * x*y;
 }
-    /*
-    ifstream in;
 
 double yLower(const double x, const double y)
 {
 	return (1 - (4 * (x - 0.5)*(x - 0.5))) + 0 * y;
 }
-    GaussSeidel gsSolver;
-    GaussianInverse gauInverse;
-
 double yUpper(const double x, const double y)
 {
 	return 0 * x*y;
 }
+
+int main(int argc, char* argv[])
+{
+    /*
+    ifstream in;
+
+
+    GaussSeidel gsSolver;
+    GaussianInverse gauInverse;
+
     denseMatrix<double> inverseTest(3);
     denseMatrix<double> invTest2(3);
     denseMatrix<double> invTest3(3);
@@ -42,14 +47,9 @@ double yUpper(const double x, const double y)
     symmetricMatrix<double> A(10);
     Math_Vector<double> b(10);
 
-int main(int argc, char* argv[])
-{
+
 	cout << argc <<argv[0]<< endl;
-	denseMatrix<double> A;
-	Math_Vector<double> b;
-	CenterDiffMesh<double, double, double, xLower, xUpper, yLower, yUpper> dirichlet;
-	dirichlet.setSubdivisions(atoi(argv[1]));
-	dirichlet(A, b);
+	
     in.open("inverseTestCases.txt");
         in >> inverseTest;
         in >> invTest2;
@@ -78,7 +78,11 @@ int main(int argc, char* argv[])
     cout << "x (approximation) = " << endl;
     cout << gsSolver(A,b) << endl;
     */
-
+	denseMatrix<double> AA;
+	Math_Vector<double> bb;
+	CenterDiffMesh<double, double, double, xLower, xUpper, yLower, yUpper> dirichlet;
+	dirichlet.setSubdivisions(atoi(argv[1]));
+	dirichlet(AA, bb);
     cout << setprecision(10);
 
     if(argc != 2)
@@ -89,7 +93,7 @@ int main(int argc, char* argv[])
     cout << endl << "dimensions = " << dimensions << endl;
 
     //2) generate random A
-    srand(time(NULL));
+    srand((unsigned int)time(NULL));
     symmetricMatrix<double> A(dimensions);
     for(unsigned i = 0; i < A.getHeight(); i++) //for each row of A
     {
@@ -97,7 +101,7 @@ int main(int argc, char* argv[])
         {
             if(j == i)
             {
-                double number = static_cast<double>((rand() % 10000) + 123456.0f);
+                double number = static_cast<double>((rand() % 10000) + 123456.0);
                 double decimal = (static_cast<double>(rand()%100)/100.0f);
                 cout << number << endl;
                 cout << decimal << endl;

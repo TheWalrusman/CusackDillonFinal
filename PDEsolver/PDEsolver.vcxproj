@@ -74,8 +74,18 @@
     <ClInclude Include="CenterDiffMesh.hpp" />
     <ClInclude Include="denseMatrix.h" />
     <ClInclude Include="denseMatrix.hpp" />
+    <ClInclude Include="GaussianInverse.h" />
+    <ClInclude Include="GaussianInverse.hpp" />
+    <ClInclude Include="GaussianSolver.h" />
+    <ClInclude Include="GaussianSolver.hpp" />
+    <ClInclude Include="GaussSeidel.h" />
+    <ClInclude Include="GaussSeidel.hpp" />
     <ClInclude Include="Math_Vector.h" />
     <ClInclude Include="Math_Vector.hpp" />
+    <ClInclude Include="steepestDescent.h" />
+    <ClInclude Include="steepestDescent.hpp" />
+    <ClInclude Include="symmetricMatrix.h" />
+    <ClInclude Include="symmetricMatrix.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="makefile" />
