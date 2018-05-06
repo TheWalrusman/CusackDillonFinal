@@ -3,6 +3,9 @@ Math_Vector<T> GaussSeidel::operator () (const symmetricMatrix<T>& A, const Math
 {
     if(!A.diagonallyDominate())
         throw std::invalid_argument("In GaussSeidel::operator(), matrix A is not diagonally dominate");
+    if(static_cast<unsigned>(b.getSize()) != A.getHeight())
+        throw std::invalid_argument("In steepestDescent<T>::operator() length of vector b must == height of matrix A");
+
 
     Math_Vector<T> Xapprox(b.getSize());    //the approximation of vector x in Ax=b
     denseMatrix<T> L (A.getHeight());       //lower matrix part of matrix A
@@ -32,7 +35,7 @@ Math_Vector<T> GaussSeidel::operator () (const symmetricMatrix<T>& A, const Math
     negU = U * -1;
     invL = inverse(L).getRows();
 
-    for(unsigned i = 0; i < 100; i++)
+    for(unsigned i = 0; i < 100000; i++)
     {
         Xapprox = invL * ((negU*Xapprox) + b);
     }

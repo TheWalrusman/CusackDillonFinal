@@ -9,53 +9,52 @@
 #include "symmetricMatrix.h"
 #include "GaussSeidel.h"
 #include "GaussianInverse.h"
+#include "CenterDiffMesh.h"
+#include "boundaryFunctions.h"
 using namespace std;
 
 
 int main(int argc, char* argv[])
 {
-    /*
-    ifstream in;
 
-    GaussSeidel gsSolver;
-    GaussianInverse gauInverse;
-
-    denseMatrix<double> inverseTest(3);
-    denseMatrix<double> invTest2(3);
-    denseMatrix<double> invTest3(3);
-
-    symmetricMatrix<double> A(10);
-    Math_Vector<double> b(10);
-
-    in.open("inverseTestCases.txt");
-        in >> inverseTest;
-        in >> invTest2;
-        in >> invTest3;
-    in.close();
-
-    in.open("gaussSeidelTest.txt");
-        in >> A;
-        in >> b;
-    in.close();
+    if(argc != 2)
+        throw std::invalid_argument("The must be at exactly two command line arguments");
 
 
-    cout << inverseTest << endl;
-    cout << invTest2 << endl;
-    cout << invTest3 << endl;
+    int numOfSubDivisions = atoi(argv[1]);
+    symmetricMatrix<double> A;
+    Math_Vector<double> b;
+    CenterDiffMesh<double,double,double, xLower, xUpper, yLower, yUpper> dirichlet;
+    steepestDescent steepDescent;
+    GaussSeidel gausSied;
 
-    cout << inverseTest * gauInverse(inverseTest) << endl;
-    cout << invTest2 * gauInverse(invTest2) << endl;
-    cout << invTest3 * gauInverse(invTest3) << endl;
+    dirichlet.setSubdivisions(numOfSubDivisions);
+    dirichlet(A,b);
 
-    cout << endl << endl << endl;
-    cout << "A = " << endl;
-    cout << A << endl;
-    cout << "B = " << endl;
+    cout << "=== Steepest Descent ===" << endl;
+    cout << "x = " << endl;
+    cout << steepDescent(A,b) << endl;
+    cout << "b = " << endl;
     cout << b << endl;
-    cout << "x (approximation) = " << endl;
-    cout << gsSolver(A,b) << endl;
-    */
+    cout << "A*x = " << endl;
+    cout << A*steepDescent(A,b) << endl;
 
+    cout << "=== Gauss Seidel ===" << endl;
+    cout << "x = " << endl;
+    cout << gausSied(A,b) << endl;
+    cout << "b = " << endl;
+    cout << b << endl;
+    cout << "A*x = " << endl;
+    cout << A*gausSied(A,b) << endl;
+
+
+    // cout << "A = " << endl;
+    // cout << A << endl;
+    // cout << "b = " << endl;
+    // cout << b << endl;
+
+    /*
+    //===================== TESTING GAUSS-SEIDEL WITH A RANDOM MATRIX A AND VECTOR B =========================
     cout << setprecision(10);
 
     if(argc != 2)
@@ -113,6 +112,9 @@ int main(int argc, char* argv[])
     //8) output (b - (A * Xapprox))    (This should be close to or equal to the zero vector)
     cout << "(b - (A*Xapprox)) = " << endl;
     cout << (b - (A*Xapprox)) << endl;
+    //===========================================================================================
+    */
+
 
     return 0;
 }
